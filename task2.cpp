@@ -25,7 +25,7 @@ vector<vector<string>> parseCSV (ifstream &ifile){
             vector<string> line_values;
             stringstream lineStream(line);
 
-            while(getline(lineStream, cell, ',')){
+            while(getline(lineStream, cell, ',') || getline(lineStream, cell, ' ')){
 
                 line_values.push_back(cell);
 
@@ -49,10 +49,10 @@ void fixAndSave (const vector<vector<string>> &data, const int &k, ofstream &ofi
         for(unsigned int j = 0; j < values[i].size(); j++){
 
             // If there is an error, interpolate its value with its k-neighbors
-            if (stoi(values[i][j]) == 0) {
+            if (strtof(values[i][j].c_str(),0) == 0) {
 
-                int interp = 0;
-                int n = 0;
+                float interp = 0;
+                uint8_t n = 0;
 
                 for(char u = -k; u <= k; u++){
                     for(char v = -k; v <= k; v++){
@@ -60,7 +60,7 @@ void fixAndSave (const vector<vector<string>> &data, const int &k, ofstream &ofi
                             (i+u >= 0) && (j+v >= 0) && 
                             (i+u <= values.size()-1) && (j+v <= values.size()-1)){
 
-                                interp += stoi(values[i+u][j+v]);
+                                interp += strtof(values[i+u][j+v].c_str(),0);
                                 n++;
 
                         }
