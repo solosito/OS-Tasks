@@ -87,9 +87,7 @@ bool checkArgs(const int &argc, char* argv[]){
 
     // Check number of arguments
     if (argc != 3){
-        // Print usage info
-        std::cerr << "\n\n\tUsage: " << argv[0] << " <input>" << " <output>\n\n" << std::endl;
-        return false;
+        throw invalid_argument("\n\n\tInvalid arguments");
     }
     return true;
 }
@@ -98,7 +96,15 @@ bool checkArgs(const int &argc, char* argv[]){
 int main(int argc, char* argv[])
 {
     // Arguments check
-	assert(checkArgs(argc, argv));
+    try {
+        checkArgs(argc, argv);
+    }
+    catch (const std::exception &e) {
+        // Print usage info
+        std::cout << e.what() << std::endl;
+        std::cerr << "\n\n\tUsage: " << argv[0] << " <input>" << " <output>\n\n" << std::endl;
+        return EXIT_FAILURE;
+    }
 
     // Files paths
     const char* const ipath = argv[1];
@@ -117,6 +123,5 @@ int main(int argc, char* argv[])
     // Check errors, interpolate them and save to file
     fixAndSave(values, k, ofile);
 
-
-    return 0;
+    return EXIT_SUCCESS;
 }

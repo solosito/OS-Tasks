@@ -21,7 +21,9 @@ void sortWrtContainer2(T1& container1, const T2& container2)
 {
 
   // Check containers have the same size
-  assert(container1.size() == container2.size() && "Containers sizes mismatch.");
+  if(container1.size() != container2.size()){
+    throw invalid_argument("\n\n\tContainers sizes mismatch\n\n");
+  }
 
   // Variable for storaging pairs of values
   typedef std::pair<typename T1::value_type,typename T2::value_type> TPair;
@@ -60,7 +62,14 @@ int main(){
   vector<float> container2 = {4,7,1};
 
   // Sort the containers
-  sortWrtContainer2(container1, container2);
+  try {
+    sortWrtContainer2(container1, container2);
+  }
+  catch (const std::exception &e) {
+      std::cout << e.what() << std::endl;
+      return EXIT_FAILURE;
+  }
+  
 
-  return 0;
+  return EXIT_SUCCESS;
 }
